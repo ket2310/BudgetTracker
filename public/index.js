@@ -1,48 +1,6 @@
 let transactions = [];
 let myChart;
 
-// Create an instance of a db object for us to store the open database in
-let db;
-
-window.onload = function () {
-  let request = window.indexedDB.open('transactions_db', 1);
-}
-
-// onerror handler signifies that the database didn't open successfully
-request.onerror = function() {
-  console.log('Database failed to open');
-};
-
-// onsuccess handler signifies that the database opened successfully
-request.onsuccess = function() {
-  console.log('Database opened successfully');
-
-  // Store the opened database object in the db variable. This is used a lot below
-  db = request.result;
-
-  // Run the displayData() function to display the notes already in the IDB
-  displayData();
-};
-
-// Setup the database tables if this has not already been done
-request.onupgradeneeded = function(e) {
-  // Grab a reference to the opened database
-  let db = e.target.result;
-
-  // Create an objectStore to store our notes in (basically like a single table)
-  // including a auto-incrementing key
-  let objectStore = db.createObjectStore('transactions_os', { keyPath: 'id', autoIncrement:true });
-
-  // Define what data items the objectStore will contain
-  objectStore.createIndex('name', 'name', { unique: false });
-  objectStore.createIndex('date', 'date', { unique: false });
-
-  console.log('Database setup complete');
-};
-
-
-
-
 fetch("/api/transaction")
   .then(response => {
     return response.json();
